@@ -44,7 +44,7 @@ boolean verificato = false;
 boolean lavoroFinito = false;
 boolean inizio = true;
 
-void acquisizione() {       // manca controllo sul tempo !!!!
+void acquisizione() {      
   if (inizio == true) {      
     // acquisisco valore dal sensore di pressione
     int valore = analogRead(pressionePin);
@@ -118,7 +118,7 @@ void animazione() {
   digitalWrite(giallo, LOW);
 }
 
-void aproCoperchio() {  ///////////////////////////////////////////////////////////metto il whilww con timeout
+void aproCoperchio() {           // manca controllo sul tempo !!!!
   digitalWrite(giallo, HIGH);
   if (verificato == true) {
     // acquisiisco la distanza di quanto devo spostarmi
