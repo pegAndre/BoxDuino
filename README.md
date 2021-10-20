@@ -4,10 +4,10 @@ la combinazione è esatta, uno stepper motor aprirà la scatola alla giusta ango
 portare a termine l'apertura o abortirà il tentativo. Una volta aperta la scatolà puo essere chiusa con un bottone in modo automatico.
 
  <h2>Hardware (indicativo):</h2>
-	- ELEGOO UNO R3
-	- Sensore di Pressione (Akozon DF9-40)
-	- Stepper Motor ()
-	- Ultrasuoni ()
-	- Bottone 
-	- Vari Led
-	- Varie Resistenze (2k ohm e 10k ohm)
+ 	<li>ELEGOO UNO R3</li>
+	<li>Sensore di Pressione (Akozon DF9-40)</li>
+	<li>Stepper Motor (28BYJ-48)</li>
+	<li>Ultrasuoni (HC-SR04)</li>
+	<li>Bottone </li>
+	<li>Vari Led</li>
+	<li>Varie Resistenze (2k ohm e 10k ohm)</li>
