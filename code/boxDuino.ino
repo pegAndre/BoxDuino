@@ -8,12 +8,14 @@
 #define rosso 5
 #define blu 4
 #define bottone 3
+#define bottoneDue 2
 
 Ultrasonic ultra(12, 13);
 Stepper myStepper(2048, 11, 9, 10, 8);
 
 //setup
 void setup() {
+  Serial.begin(115200);
   pinMode(pressionePin, INPUT);
   pinMode(giallo, OUTPUT);
   digitalWrite(giallo, LOW);
@@ -25,6 +27,7 @@ void setup() {
   digitalWrite(blu, HIGH);
   myStepper.setSpeed(10);
   attachInterrupt(digitalPinToInterrupt(bottone), segnale, FALLING);
+  attachInterrupt(digitalPinToInterrupt(bottoneDue), cambioPin, FALLING);
   settaggioSequenza();
 }
 
@@ -240,11 +243,10 @@ void mostramiErrore() {
   sbagliato(erroreDue, 2, erroreSecondo);
   sbagliato(erroreTre, 3, erroreTerzo);
   sbagliato(erroreQuattro, 4, erroreQuarto);
-
 }
 
 
-void sbagliato(boolean errore,int colore, boolean sopraOSotto) {
+void sbagliato(boolean errore, int colore, boolean sopraOSotto) {
   if (errore == true) {
     errore = false;
     led(colore, true);
@@ -252,13 +254,13 @@ void sbagliato(boolean errore,int colore, boolean sopraOSotto) {
     led(colore, false);
     delay(1000);
 
-    if(sopraOSotto == true){
+    if (sopraOSotto == true) {
       led(2, true);
       sopraOSotto = false;
-    }else{
+    } else {
       led(3, true);
     }
-    
+
     delay(1000);
     animazione();
     delay(1000);
@@ -434,6 +436,16 @@ void led(int colore, boolean veroFalso) {
   }
 }
 
+void cambioPin(){
+  if (lavoroFinito == true) {
+    noInterrupts();
+    led(1, true);
+    led(3, false);
+    miStoAllenando = true;
+    settaggioSequenza();
+    interrupts();
+  }
+}
 
 void loop() {
   acquisizione();
