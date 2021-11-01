@@ -14,7 +14,7 @@ portare a termine l'apertura o abortirà il tentativo. Una volta aperta la scato
 	<li>Vari Led</li>
 	<li>Varie Resistenze (2k ohm e 10k ohm)</li>
 	
-	
+<br>	
 
 
 <h2>Schema elettrico (working...)</h2>
