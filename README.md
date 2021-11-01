@@ -13,3 +13,7 @@ portare a termine l'apertura o abortirà il tentativo. Una volta aperta la scato
 	<li>Bottone </li>
 	<li>Vari Led</li>
 	<li>Varie Resistenze (2k ohm e 10k ohm)</li>
+
+
+<h2>Schema elettrico (working...)</h2>
+![schema](https://user-images.githubusercontent.com/78487344/139689381-53a55bec-02a3-4e64-9a46-7aa79b15c8e3.jpg)
