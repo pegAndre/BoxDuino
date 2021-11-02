@@ -54,12 +54,14 @@ boolean primaVolta = true;
 boolean prendoTempo = true;
 boolean primaChiusura;
 boolean miStoAllenando = true;
+boolean changePin = false;
 
 
 void settaggioSequenza() {
   while (indiceInizio < 7) {
     delay(100);
     valore = analogRead(pressionePin);
+    Serial.println(valore);
     if (verifica == true) {
       // salvo dato solo se rispetta i parametri di acquisizione
       if (valore > valorePre && valorePre < 1000) {
@@ -292,6 +294,7 @@ void aproCoperchio() {
       tempoInizializzo = true;
       primaVolta = true;
       verificato = false;
+      changePin = true;
     }
 
     // controllo il tempo
@@ -330,7 +333,7 @@ int prendoValore(int posizioneCoperchio) {
 // chiudo il coperchio
 void chiudiCoperchio() {
   if (lavoroFinito == true) {
-
+      changePin = false;
     if (prendoTempo == true) {
       tempo = millis();
       prendoTempo = false;
@@ -437,11 +440,12 @@ void led(int colore, boolean veroFalso) {
 }
 
 void cambioPin(){
-  if (lavoroFinito == true) {
-    noInterrupts();
+  if (changePin == true) {
+    noInterrupts();  // togli questo e  metti doppia variabile
     led(1, true);
     led(3, false);
     miStoAllenando = true;
+    indiceInizio = 0;
     settaggioSequenza();
     interrupts();
   }
