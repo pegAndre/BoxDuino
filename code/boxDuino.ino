@@ -15,7 +15,6 @@ Stepper myStepper(2048, 11, 9, 10, 8);
 
 //setup
 void setup() {
-  Serial.begin(115200);
   pinMode(pressionePin, INPUT);
   pinMode(giallo, OUTPUT);
   digitalWrite(giallo, LOW);
@@ -61,7 +60,6 @@ void settaggioSequenza() {
   while (indiceInizio < 7) {
     delay(100);
     valore = analogRead(pressionePin);
-    Serial.println(valore);
     if (verifica == true) {
       // salvo dato solo se rispetta i parametri di acquisizione
       if (valore > valorePre && valorePre < 1000) {
@@ -115,7 +113,6 @@ void acquisizione() {
   if (inizio == true) {
     delay(100);
     valore = analogRead(pressionePin);
-    Serial.println(valore);
     if (verifica == true) {
       // salvo dato solo se rispetta i parametri di acquisizione
       if (valore > valorePre && valorePre < 1000) {
@@ -454,7 +451,6 @@ void cambioSequenza(){
 
 void cambioPin(){
   changePin = true;
-      // togli questo e  metti doppia variabile
 }
 
 void loop() {
