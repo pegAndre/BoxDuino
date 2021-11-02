@@ -294,7 +294,6 @@ void aproCoperchio() {
       tempoInizializzo = true;
       primaVolta = true;
       verificato = false;
-      changePin = true;
     }
 
     // controllo il tempo
@@ -439,20 +438,28 @@ void led(int colore, boolean veroFalso) {
   }
 }
 
-void cambioPin(){
-  if (changePin == true) {
-    noInterrupts();  // togli questo e  metti doppia variabile
+void cambioSequenza(){
+  if(changePin == true){
     led(1, true);
     led(3, false);
     miStoAllenando = true;
+    volte = 0;
+    inizio = true;
     indiceInizio = 0;
     settaggioSequenza();
-    interrupts();
+    changePin = false;
+    led(3, true);
   }
+}
+
+void cambioPin(){
+  changePin = true;
+      // togli questo e  metti doppia variabile
 }
 
 void loop() {
   acquisizione();
   aproCoperchio();
   chiudiCoperchio();
+  cambioSequenza();
 }
