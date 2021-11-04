@@ -19,5 +19,4 @@ portare a termine l'apertura o abortirà il tentativo. Una volta aperta la scato
 
 <h2>Schema elettrico (working...)</h2>
 
-![schemaElet](https://user-images.githubusercontent.com/78487344/139835660-fe234525-6b85-4182-8c7a-4fd3b17ea8b4.jpg)
-
+![schema](https://user-images.githubusercontent.com/78487344/140295181-7ebf395d-3990-46d8-942a-38f863ec2417.png)
