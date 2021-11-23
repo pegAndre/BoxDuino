@@ -37,6 +37,7 @@ Una volta chiusa correttamente la scatola si rimetterà in attesa del codice di 
 
 
 <br>
+<br>
 
  <h2>Hardware (indicativo):</h2>
  	<li>ELEGOO UNO R3</li>
