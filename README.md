@@ -1,18 +1,17 @@
 # BoxDuino
-BoxDuino è una scatola la quale è protetta da un meccanismo di protezione, per poter accedere ad essa è necessario comporre una combinazione su un sensore di pressione, se
-la combinazione è esatta, uno stepper motor aprirà la scatola alla giusta angolazione regolando l'apertura tramite un sensore a ultrasuoni che se ostacolato cercherà comunque di 
-portare a termine l'apertura o abortirà il tentativo. Una volta aperta la scatolà puo essere chiusa con un bottone in modo automatico.
+BoxDuino è una scatola automatizzata in apertura e chisura tramite uno stepper motor che viene comandato da un sensore ultrasuoni, per poter azionare il meccanismo di apertura è necessario conoscere un codice formato da quattro pressioni, che viene impostato all'accensione della macchina. Successivamente il codice puo essere sempre cambiato quando la scatola è aperta. 
+Per dare un servizio di feedback all'utente vengono utilizzati quattro led, che in base al loro stato possono indicare diverse informazioni (esempio: codice errato(led rosso), codice corretto(led verde), ...), un'altro feedback importante dato dai led al momento delle acquisizioni delle pressioni è la loro illumnazione graduale all'aumentare della pressione esercitata sul sensore.  
 
 <br>
 
 <h2>MANUALE UTENTE</h2>
 
-<h3>1. SETTAGIO SEQUENZA</h3>
-<p>Al primo avvio del BoxDuino bisognerà impostare un codice, formato da quattro pressioni indipendenti, le quali verrà usata come codice di accesso. 
-Per salvare una pressione basta premere il sensore a piacimento regolandosi con il supporto visivo dato dai led, dopo di che al raggiungimento della pressione voluta contemporaneamente bisogna schiacciare bottone posto fuori dalla scatola per salvarla.</p>
+<h3>1. AVVIO BOXDUINO</h3>
+<p>Al primo avvio del BoxDuino bisognerà impostare un codice, formato da quattro pressioni indipendenti, le quali verranno usate come codice di accesso. 
+Per salvare una pressione basta premere il sensore di pressione a piacimento regolandosi con il supporto visivo dato dai led, dopo di che al raggiungimento della pressione voluta contemporaneamente bisogna schiacciare bottone posto fuori dalla scatola per salvarla.</p>
 <p>Ripete per le successive pressioni.</p>
 
-Una volta settato il codice inizierà una fase di allenamento, evidenziata da una animazione da parte dei led, nella quale il codice dovrà essere reinserito correttamente per due volte, se lo sbagli non preoccuparti !! il codice corretto verrà reso visibile sui led in modo che tu possa impararlo correttamente.
+Una volta settato il codice inizierà una fase di allenamento, evidenziata da una animazione da parte dei led, nella quale il codice dovrà essere reinserito correttamente per due volte, se viene sbagliato il codice corretto verrà reso visibile sui led in modo che si possa impararlo correttamente.
 
 
 <h3>2. SCATOLA CHIUSA</h3>
@@ -20,17 +19,17 @@ Quando la scatola è chiusa sarà sempre in attesa di ricevere il codice, una vo
 
 
 <h3>3. IN APERTURA</h3>
-<p>Una volta inserito il codice corretto la scatola si aprirà in modo automatico! Potrai vedere questo stato dal led giallo che indica che il motore è in funzione.
-Finche il led giallo non si spegne non toccare la scatola!</p>
+<p>Una volta inserito il codice corretto la scatola si aprirà in modo automatico, si potrà vedere questo stato dal led giallo che indica che il motore è in funzione.
+Finche il led giallo non si spegne non bisogna toccare la scatola.</p>
 <p>Ricorda:
-Lascia sempre libero il coperchio, non ostruirlo, in caso contrario se dopo diversi tentativi non riesce ad aprirsi, la scatola si richiuderà!</p>
+Lascia sempre libero il coperchio, non ostruirlo, in caso contrario se dopo diversi tentativi non riesce ad aprirsi, la scatola si richiuderà.</p>
 
 <h3>4. SCATOLA APERTA</h3>
-Una volta che il led Giallo sarà spento la scatola è aperta e potrai svolgere le tue attività in maniera sicura !
+Una volta che il led Giallo sarà spento la scatola è aperta e si potrà svolgere le proprie attività in maniera sicura.
 
-Se desideri cambiare il codice di sblocco puoi farlo in questo momento, semplicemente premendo il bottone sinistro all'interno della scatola e ri-setterai il codice proprio come hai fatto alla prima accensione.
+Se si desidera cambiare il codice di sblocco si puo fare in questo momento, semplicemente premendo il bottone sinistro all'interno della scatola, le azioni da eseguire saranno le stesse che sono state effettuate per il della prima sequenza
 
-Per chiudere la scatola premi il bottone posto al di fuori della scatola.
+Per chiudere la scatola basta premere il bottone posto al di fuori della scatola.
 
 <h3>5. IN CHIUSURA</h3>
 Una volta premuto il bottone la scatola si chiuderà, il led giallo si illuminerà e da questo momento non toccare la scatola e non ostruirla in alcun modo !
