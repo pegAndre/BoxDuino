@@ -2,460 +2,290 @@
 #include <Ultrasonic.h>
 #include <Stepper.h>
 
-#define pressionePin A0
-#define giallo 7
-#define verde 6
+#define blu 9
 #define rosso 5
-#define blu 4
-#define bottone 3
+#define verde 6
+#define giallo 7
+#define pressionePin A0
 #define bottoneDue 2
+#define bottone 3
+#define minimoRaggiunto 5
+#define massimoRaggiunto 19
 
 Ultrasonic ultra(12, 13);
-Stepper myStepper(2048, 11, 9, 10, 8);
+Stepper myStepper(2048, 11, 4, 10, 8);
 
-//setup
 void setup() {
+  Serial.begin(115200);
+  pinMode(bottoneDue, INPUT);
   pinMode(pressionePin, INPUT);
-  pinMode(giallo, OUTPUT);
-  digitalWrite(giallo, LOW);
-  pinMode(verde, OUTPUT);
-  digitalWrite(verde, LOW);
   pinMode(rosso, OUTPUT);
-  digitalWrite(rosso, LOW);
   pinMode(blu, OUTPUT);
-  digitalWrite(blu, HIGH);
-  myStepper.setSpeed(10);
-  attachInterrupt(digitalPinToInterrupt(bottone), segnale, FALLING);
-  attachInterrupt(digitalPinToInterrupt(bottoneDue), cambioPin, FALLING);
-  settaggioSequenza();
+  pinMode(giallo, OUTPUT);
+  pinMode(verde, OUTPUT);
+  attachInterrupt(digitalPinToInterrupt(bottone), cambioSequenza, FALLING);
+  myStepper.setSpeed(9);
+  inizializzazioneCombinazione();
+  
 }
+//VARIABILI                                           
+const byte inChiusura = 4;
+const byte scatolaChiusa = 1;
+const byte scatolaAperta = 3;
+const byte inApertura =  2;
+const byte premuto =  1;
+const int range = 150;
+const byte minimaDistanza =  1;
+const int massimaDistanza = 20;
+const int salita = -1;
+const int discesa = 1;
 
-//definizioni variabili
-int valorePre = 1023;
-int valore;
-int indice = 0;
-int distance;
-int mancano;
-int posizione;
-int volte = 0;
-int indiceInizio = 0;
-int acquisito[4];
-int pin[8];
-boolean verifica = true;
-boolean inizio = true;
-boolean verificato = false;
-boolean lavoroFinito = false;
-boolean controlloTempo = false;
+byte stato;
+int combinazione[4];
+int sequenza[4];
+boolean settoTempo = true;
 unsigned long tempo;
-unsigned long controlloT;
-boolean tempoInizializzo = true;
-boolean primaVolta = true;
-boolean prendoTempo = true;
-boolean primaChiusura;
-boolean miStoAllenando = true;
-boolean changePin = false;
 
-
-void settaggioSequenza() {
-  while (indiceInizio < 7) {
-    delay(100);
-    valore = analogRead(pressionePin);
-    if (verifica == true) {
-      // salvo dato solo se rispetta i parametri di acquisizione
-      if (valore > valorePre && valorePre < 1000) {
-        led(1, false);
-        salvoCombinazione(valorePre);
-        verifica = false;
-      }
-    } else if (valore > 1000) {
-      verifica = true;
-    }
-    valorePre = valore;
-  }
+//FUNZIONI
+void inizializzazioneCombinazione(){
+  acquisizione(combinazione);
   allenamento();
-  miStoAllenando = false;
-  led(1, true);
+  stato = scatolaChiusa;
 }
 
-// Salvo i range che l'utente ha impostato
-void salvoCombinazione(int dato) {
-  animazione();
-  pin[indiceInizio] = dato - 150;
-  indiceInizio++;
-  pin[indiceInizio] = dato + 150;
-  indiceInizio++;
+// ACQUISISCE QUATTRO PRESSIONI
+void acquisizione(int sequenza[]) {
+  int indiceSequenza = 0;
+  while (indiceSequenza < 4) {
+    // Ogni 50 millisecondi leggo un valore dal sensore della pressione
+    delay(50);
+    int valoreLetto = analogRead(pressionePin);
+    // illumino i led in base al valore premuto
+    illuminaSequenza(valoreLetto);
+
+    // se il bottone è premuto salvo il valore
+    if (digitalRead(bottoneDue) == premuto) {
+      sequenza[indiceSequenza] = valoreLetto;
+      indiceSequenza++;
+      delay(2000);
+    }
+  }
+
+  spegniTuttiLed();
 }
 
-// Allenamento da parte dell'utente per impostare la combinazione
-// Deve effettuarla correttamente 2 volte
-// Se sbaglia i led gli mostrano che errore ha fatto e se ha impresso troppa o troppa poca forza
+// VENGONO ILLUMINATI I LED IN BASE AL VALORE LETTO DAL SENSORE DI PRESSIONE
+void illuminaSequenza(int valorePressione) {
+
+  int luminosita;
+  // La luminosità di ciascun led dipende dalla pressione letta dal sensore
+  if (valorePressione > 600) {
+    luminosita = map(valorePressione, 1023, 600, 0, 255);
+    accendoLed(luminosita, 0, 0, 0);
+  } else if (valorePressione > 400) {
+    luminosita = map(valorePressione, 600, 400, 0, 255);
+    accendoLed(255, luminosita, 0, 0);
+  } else if (valorePressione > 200) {
+    luminosita = map(valorePressione, 400, 200, 0, 255);
+    accendoLed(255, 255, luminosita, 0);
+  } else {
+    luminosita = map(valorePressione, 200, 0, 0, 255);
+    accendoLed(255, 255, 255, luminosita);
+  }
+}
+
+// ACCENDE I LED IN MODO ANALOGICO
+void accendoLed(int luminositaUno, int luminositaDue, int luminositaTre, int luminositaQuattro) {
+  analogWrite(blu, luminositaUno);
+  analogWrite(rosso, luminositaDue);
+  analogWrite(verde, luminositaTre);
+  analogWrite(giallo, luminositaQuattro);
+}
+
+//VERIFICA LA COMBINAZIONE INSERITA
+boolean verifica(int sequenza[]) {
+  if (sequenza[0] > (combinazione[0] - range) && sequenza[0] < (combinazione[0] + range) && sequenza[1] > (combinazione[1] - range) && sequenza[1] < (combinazione[1] + range) && sequenza[2] > (combinazione[2] - range) && sequenza[2] < (combinazione[2] + range) && sequenza[3] > (combinazione[3] - range) && sequenza[3] < (combinazione[3] + range)) {
+    //LOGGATTO
+    sequenzaCorretta();
+    return true;
+  } else {
+    sequenzaErrata();
+    return false;
+  }
+}
+
+void sequenzaCorretta(){
+    digitalWrite(verde, HIGH);
+    delay(2000);
+    digitalWrite(verde, LOW);
+}
+
+void sequenzaErrata(){
+    digitalWrite(rosso, HIGH);
+    delay(2000);
+    digitalWrite(rosso, LOW);
+}
+
 void allenamento() {
+  int allenamentoCompiuto = 0;
   animazione();
-
-  while (volte < 2) {
-    acquisizione();
-    if (verificato == true) {
-      delay(800);
-      verificato = false;
-      inizio = true;
-      volte++;
-      led(3, false);
-      led(1, true);
-    }
-  }
-  animazione();
-  led(1, true);
-}
-
-
-// acquisizione valori letti dal sensore di pressione
-void acquisizione() {
-  if (inizio == true) {
-    delay(100);
-    valore = analogRead(pressionePin);
-    if (verifica == true) {
-      // salvo dato solo se rispetta i parametri di acquisizione
-      if (valore > valorePre && valorePre < 1000) {
-        led(1, false);
-        led(4, true);
-        salvaValore(indice, valorePre);
-        verifica = false;
-      }
-    } else if (valore > 1000) {
-      verifica = true;
-    }
-    valorePre = valore;
-
-    // controllo sul tempo
-    if (controlloTempo == true) {
-      controlloT = millis() - tempo;
-      if ((controlloT) > 100000) {
-        animazione();
-        erroreAutenticazione();
-      }
-    }
-  }
-}
-
-// errore di autenticazone per tempo o per pin errato
-void erroreAutenticazione() {
-  led(2, true);
-  delay(1500);
-  led(2, false);
-  led(1, true);
-  valorePre = 1023;
-  indice = 0;
-  controlloTempo = false;
-}
-
-// salvo il valore nella poszione corretta
-void salvaValore(int posizione, int dato) {
-  acquisito[posizione] = dato;
-  if (indice == 3) {
-    indice = 0;
-    autenticazione();
-  } else {
-    indice++;
-  }
-
-  if (indice == 1) {
-    tempo = millis();
-    controlloTempo = true;
-  }
-
-}
-
-void autenticazione() {
-  animazione();
-  // controllo correttezza codice
-  if (acquisito[0] > pin[0] && acquisito[0] < pin[1] && acquisito[1] > pin[2] && acquisito[1] < pin[3] && acquisito[2] > pin[4] && acquisito[2] < pin[5] && acquisito[3] > pin[6] && acquisito[3] < pin[7]) {
-    // codice corretto apro la scatola
-    led(3, true);
-    controlloTempo = false;
-    verificato = true;
-    inizio = false;
-  } else {
-    // codice errato mi rimetto in ascolto
-    if (miStoAllenando == true) {
-      led(2, true);
-      delay(1500);
-      led(2, false);
-      delay(1000);
-      mostramiErrore();
-    }
-    delay(1000);
-    erroreAutenticazione();
-  }
-}
-
-
-// viene mostrato l'erorre all'utente tramite i led
-void mostramiErrore() {
-  boolean erroreUno = false;
-  boolean erroreDue = false;
-  boolean erroreTre = false;
-  boolean erroreQuattro = false;
-  boolean errorePrimo = false;
-  boolean erroreSecondo = false;
-  boolean erroreTerzo = false;
-  boolean erroreQuarto = false;
-
-  // ptima viene mostarto quali valori ha sbagliato, il primo led raprresenta il primo valore, il secondo led....
-  if (acquisito[0] < pin[0] || acquisito[0] > pin[1]) {
-    led(1, true);
-    erroreUno = true;
-    if (acquisito[0] < pin[0]) {
-      errorePrimo = true;
-    }
-  }
-
-  if (acquisito[1] < pin[2] || acquisito[1] > pin[3]) {
-    led(2, true);
-    erroreDue = true;
-    if (acquisito[1] < pin[2]) {
-      erroreSecondo = true;
-    }
-  }
-
-  if (acquisito[2] < pin[4] || acquisito[2] > pin[5]) {
-    led(3, true);
-    erroreTre = true;
-    if (acquisito[2] < pin[4]) {
-      erroreTerzo = true;
-    }
-  }
-
-  if (acquisito[3] < pin[6] || acquisito[3] > pin[7]) {
-    led(4, true);
-    erroreQuattro = true;
-    if (acquisito[3] < pin[6]) {
-      erroreQuarto = true;
-    }
-  }
-
-  delay(1000);
-  animazione();
-  delay(1000);
-
-  // verrà poi acceso il led che raprresenta il valore sbagliato e successivamente o led verde(troppo poco forte) o led rosso(troppo forte)
-  sbagliato(erroreUno, 1, errorePrimo);
-  sbagliato(erroreDue, 2, erroreSecondo);
-  sbagliato(erroreTre, 3, erroreTerzo);
-  sbagliato(erroreQuattro, 4, erroreQuarto);
-}
-
-
-void sbagliato(boolean errore, int colore, boolean sopraOSotto) {
-  if (errore == true) {
-    errore = false;
-    led(colore, true);
-    delay(1000);
-    led(colore, false);
-    delay(1000);
-
-    if (sopraOSotto == true) {
-      led(2, true);
-      sopraOSotto = false;
+  while (allenamentoCompiuto < 2) {  
+    acquisizione(sequenza);
+    if (verifica(sequenza) == true) {
+      allenamentoCompiuto++;
     } else {
-      led(3, true);
+      mostramiSequenza();
     }
+  }
 
-    delay(1000);
-    animazione();
-    delay(1000);
+  animazione();
+}
+
+//MOSTRA LA SEQUENZA IN MODO DINAMICO
+void mostramiSequenza() {
+  // mostro la pressione da esercitare tramite la luminosità dei led, scandendo tutti i valori
+  for (int indiceSequenza = 0; indiceSequenza < 4; indiceSequenza++) {
+    //accendo il led che mostro
+    for (int valoreLuminosita = 1023; valoreLuminosita >= combinazione[indiceSequenza]; valoreLuminosita-- ) {
+      illuminaSequenza(valoreLuminosita);
+      delay(2);
+    }
+    delay(1500);
+    spegniTuttiLed();
   }
 }
 
+void animazione(){
+  accendoTuttiLed();
+  delay(800);
+  digitalWrite(blu, LOW);
+  digitalWrite(giallo, LOW);
+  delay(800);
+  spegniTuttiLed();
+}
 
+void spegniTuttiLed() {
+  digitalWrite(blu, LOW);
+  digitalWrite(rosso, LOW);
+  digitalWrite(verde, LOW);
+  digitalWrite(giallo, LOW);
+}
 
-// apro il coperchio
-void aproCoperchio() {
-  if (verificato == true) {
+void accendoTuttiLed(){
+  digitalWrite(blu, HIGH);
+  digitalWrite(rosso, HIGH);
+  digitalWrite(verde, HIGH);
+  digitalWrite(giallo, HIGH);
+}
 
-    // inizializzo il tempo
-    if (tempoInizializzo == true) {
-      tempo = millis();
-      tempoInizializzo = false;
-    }
-    led(4, true);
-    // leggo la distanza
-    distance = ultra.read();
-    if (distance < 20 && distance > 3) {
-      // mi muovo in base alla distanza corretta
-      myStepper.step(-prendoValore(distance));
-    } else if (distance > 19) {
-      // coperchio aperto, aspetto che l'utente lo voglia chiudere
-      led(4, false);
-      led(2, false);
-      led(3, true);
-      tempoInizializzo = true;
-      primaVolta = true;
-      verificato = false;
-    }
-
-    // controllo il tempo
-    controlloT = millis() - tempo;
-    if (controlloT > 10000) {
-      animazione();
-      erroreApertura();
-    }
+//AUTORIZZA L'APERTURA DELLA SCATOLA O MENO A SECONDA DELLA COMBINAZIONE
+void autenticazione() {
+  //acquisizione della sequenza
+  acquisizione(sequenza);
+  //verifica della combinazione, se errata lo stato non cambia
+  if (verifica(sequenza) == true) {
+    digitalWrite(verde, HIGH);
+    stato = inApertura;
   }
 }
 
-// errore di apertura di tempo, provo 2 tentativi altrimenti chiudo
-void erroreApertura() {
-  led(2, true);
-  tempoInizializzo = true;
-  if (primaVolta == false) {
-    verificato = false;
-    lavoroFinito = true;
-    primaVolta = true;
+void movimentoCoperchio(int valoreFisso, int salitaODiscesa) {
+
+  digitalWrite(giallo, HIGH);
+  int distanza = ultra.read();
+
+  if (distanza >= 4 && distanza <= 24) {
+
+    int valoreMovimento = calcoloMovimentoMotore(distanza, valoreFisso);
+    myStepper.step(valoreMovimento * salitaODiscesa);
+
+    switch (salitaODiscesa) {
+      case salita:
+        if (ultra.read() > massimoRaggiunto) {
+          digitalWrite(giallo, LOW);
+          stato = scatolaAperta; 
+          settoTempo = true;
+        }
+        break;
+
+      case discesa:
+        if (ultra.read() < minimoRaggiunto) {
+          spegniTuttiLed();
+          stato = scatolaChiusa;  
+          settoTempo = true;
+        }
+        break;
+    }
+
   } else {
-    primaVolta = false;
+    //ERRORE IL COPERCHIO NON è IN SEDE
+    Serial.println("IL COPERCHIO NON E' IN SEDE");
+    delay(200);
   }
 
-  delay(2000);
-  // disabilitare led rosso in chiudi coperchio
+  controlloTempo(15000); 
 }
 
-// prendo il valore lo mappo per esere letto dallo stepper motor
-int prendoValore(int posizioneCoperchio) {
-  mancano = 21 - posizioneCoperchio;
+void controlloTempo(unsigned long prefissato) {
+
+  unsigned long tempoDiff = 0;
+
+  if (settoTempo == true) {
+    tempo = millis();  
+    settoTempo = false;
+  }
+
+  tempoDiff = millis() - tempo;
+
+  if (tempoDiff > prefissato) {   
+    settoTempo = true;
+    stato = inChiusura;
+  }
+}
+
+int calcoloMovimentoMotore(int posizioneCoperchio, int valoreFisso) {
+  int mancano = posizioneCoperchio - valoreFisso;
+
+  // togliere -- mettere funzione abs()
+  if (mancano < 0) {
+    mancano = mancano * -1; // togliere -- mettere funzione abs()
+  }
+  // togliere -- mettere funzione abs()
   mancano = map(mancano, 0, 16, 0, 100);
   mancano = map(mancano, 0, 360, 0, 2048);
   return mancano;
 }
 
-// chiudo il coperchio
-void chiudiCoperchio() {
-  if (lavoroFinito == true) {
-      changePin = false;
-    if (prendoTempo == true) {
-      tempo = millis();
-      prendoTempo = false;
-    }
-    led(4, true);
-    // leggo la distanza
-    distance = ultra.read();
-    if (distance > 5) {
-      // muovo lo stepper motor della distanza corretta
-      myStepper.step(prendoValoreChiudo(distance));
-    } else if (distance < 5) {
-      // coperchio chiuso mi rimetto in ascolto
-      lavoroFinito = false;
-      prendoTempo = true;
-      inizio = true;
-      led(4, false);
-      led(2, false);
-      led(1, true);
-      led(3, false);
-    }
-
-    // errore di tempo
-    controlloT = millis() - tempo;
-    if ((controlloT) > 10000 ) {
-      animazione();
-      erroreChiusura();
-    }
-  }
-
-}
-
-// continuo a provare a chiudere
-void erroreChiusura() {
-  led(2, true);
-  delay(8000);
-  prendoTempo = true;
-
-}
-
-
-
-// prendo il valore lo mappo per esere letto dallo stepper motor
-int prendoValoreChiudo(int posizioneCoperchioChiuso) {
-  mancano = posizioneCoperchioChiuso - 5;
-  mancano = map(mancano, 0, 16, 0, 115);
-  mancano = map(mancano, 0, 360, 0, 2048);
-  return mancano;
-}
-
-// interrupt, il coperchio si chiuderà
-void segnale() {
-  lavoroFinito = true;
-  delay(1200);
-}
-
-// animazione led prima della fase di autenticazione
-void animazione() {
-  digitalWrite(blu, HIGH);
-  digitalWrite(rosso, HIGH);
-  digitalWrite(verde, HIGH);
-  digitalWrite(giallo, HIGH);
-  delay(1000);
-  digitalWrite(blu, LOW);
-  digitalWrite(verde, LOW);
-  digitalWrite(rosso, LOW);
-  digitalWrite(giallo, LOW);
-}
-
-// accendere o spegnere led blu
-void led(int colore, boolean veroFalso) {
-  switch (colore) {
-    case 1:
-      if (veroFalso == true) {
-        digitalWrite(blu, HIGH);
-      } else {
-        digitalWrite(blu, LOW);
-      }
-      break;
-
-    case 2:
-      if (veroFalso == true) {
-        digitalWrite(rosso, HIGH);
-      } else {
-        digitalWrite(rosso, LOW);
-      }
-      break;
-
-    case 3:
-      if (veroFalso == true) {
-        digitalWrite(verde, HIGH);
-      } else {
-        digitalWrite(verde, LOW);
-      }
-      break;
-
-    case 4:
-      if (veroFalso == true) {
-        digitalWrite(giallo, HIGH);
-      } else {
-        digitalWrite(giallo, LOW);
-      }
-      break;
-  }
-}
 
 void cambioSequenza(){
-  if(changePin == true){
-    led(1, true);
-    led(3, false);
-    miStoAllenando = true;
-    volte = 0;
-    inizio = true;
-    indiceInizio = 0;
-    settaggioSequenza();
-    changePin = false;
-    led(3, true);
-  }
+  acquisizione(combinazione);
+  allenamento();
 }
 
-void cambioPin(){
-  changePin = true;
+void attesaChiusura(){
+
+    if (digitalRead(bottoneDue) == premuto) {
+     stato = inChiusura;
+    }
 }
 
 void loop() {
-  acquisizione();
-  aproCoperchio();
-  chiudiCoperchio();
-  cambioSequenza();
+  switch (stato) {
+
+    case scatolaChiusa:
+      autenticazione();
+      break;
+
+    case inApertura:
+        movimentoCoperchio(massimaDistanza, salita);
+      break;
+
+    case scatolaAperta:
+        attesaChiusura();
+      break;
+
+    case inChiusura:
+        movimentoCoperchio(minimaDistanza, discesa);
+      break;
+  }
 }
