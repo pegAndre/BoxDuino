@@ -4,7 +4,7 @@ Per dare un servizio di feedback all'utente vengono utilizzati quattro led, che 
 
 <br>
 
-<h2 color:blue>MANUALE UTENTE</h2>
+<h2>MANUALE UTENTE</h2>
 
 <h3>1. AVVIO BOXDUINO</h3>
 <p>Al primo avvio del BoxDuino bisognerà impostare un codice, formato da quattro pressioni indipendenti, le quali verranno usate come codice di accesso. 
