@@ -20,9 +20,8 @@ Quando la scatola è chiusa sarà sempre in attesa di ricevere il codice, una vo
 
 
 <h3>3. IN APERTURA</h3>
-Una volta inserito il codice corretto la scatola si aprirà in modo automatico! Potrai vedere questo stato dal led giallo che indica che il motore è in funzione.
-Finche il led giallo non si spegne non toccare la scatola!
-
+<p>Una volta inserito il codice corretto la scatola si aprirà in modo automatico! Potrai vedere questo stato dal led giallo che indica che il motore è in funzione.
+Finche il led giallo non si spegne non toccare la scatola!</p>
 <p>Ricorda:
 Lascia sempre libero il coperchio, non ostruirlo, in caso contrario se dopo diversi tentativi non riesce ad aprirsi, la scatola si richiuderà!</p>
 
