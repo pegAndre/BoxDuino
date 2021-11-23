@@ -18,21 +18,21 @@ Una volta settato il codice inizierà una fase di allenamento, evidenziata da un
 Quando la scatola è chiusa sarà sempre in attesa di ricevere il codice, una volta inserito valuterà se è corretto (led Verde) o errato (led Rosso).
 
 
-<h3>3. IN APERTURA</h3>
+<h3>3. APERTURA SCATOLA</h3>
 <p>Una volta inserito il codice corretto la scatola si aprirà in modo automatico, si potrà vedere questo stato dal led giallo che indica che il motore è in funzione.
 Finche il led giallo non si spegne non bisogna toccare la scatola.</p>
 <p>Ricorda:
 Lascia sempre libero il coperchio, non ostruirlo, in caso contrario se dopo diversi tentativi non riesce ad aprirsi, la scatola si richiuderà.</p>
 
 <h3>4. SCATOLA APERTA</h3>
-Una volta che il led Giallo sarà spento la scatola è aperta e si potrà svolgere le proprie attività in maniera sicura.
+Una volta che il led Giallo sarà spento la scatola è aperta e si potranno essere svolte le proprie attività in maniera sicura.
 
-Se si desidera cambiare il codice di sblocco si puo fare in questo momento, semplicemente premendo il bottone sinistro all'interno della scatola, le azioni da eseguire saranno le stesse che sono state effettuate per il della prima sequenza
+Se si desidera cambiare il codice di sblocco si puo fare in questo momento, semplicemente premendo il bottone sinistro all'interno della scatola, le azioni da eseguire saranno le stesse che sono state effettuate durante la prima impostazione del primo codice di sblocco.
 
-Per chiudere la scatola basta premere il bottone posto al di fuori della scatola.
+Per chiudere la scatola basterà premere il bottone posto al di fuori di essa.
 
 <h3>5. IN CHIUSURA</h3>
-Una volta premuto il bottone la scatola si chiuderà, il led giallo si illuminerà e da questo momento non toccare la scatola e non ostruirla in alcun modo !
+Una volta premuto il bottone la scatola si chiuderà, il led giallo si illuminerà e da questo momento non bisognerà toccare la scatola e non ostruirla in alcun modo.
 Una volta chiusa correttamente la scatola si rimetterà in attesa del codice di sblocco.
 
 <br>
