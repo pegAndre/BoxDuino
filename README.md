@@ -8,9 +8,9 @@ portare a termine l'apertura o abortirà il tentativo. Una volta aperta la scato
 <h2>MANUALE UTENTE</h2>
 
 <h3>1. SETTAGIO SEQUENZA</h3>
-Al primo avvio del BoxDuino bisognerà impostare un codice, formato da quattro pressioni indipendenti, le quali verrà usata come codice di accesso. 
-Per salvare una pressione basta premere il sensore a piacimento regolandosi con il supporto visivo dato dai led, dopo di che al raggiungimento della pressione voluta contemporaneamente bisogna schiacciare bottone posto fuori dalla scatola per salvarla.
-Ripete per le successive pressioni.
+<p>Al primo avvio del BoxDuino bisognerà impostare un codice, formato da quattro pressioni indipendenti, le quali verrà usata come codice di accesso. 
+Per salvare una pressione basta premere il sensore a piacimento regolandosi con il supporto visivo dato dai led, dopo di che al raggiungimento della pressione voluta contemporaneamente bisogna schiacciare bottone posto fuori dalla scatola per salvarla.</p>
+<p>Ripete per le successive pressioni.</p>
 
 Una volta settato il codice inizierà una fase di allenamento, evidenziata da una animazione da parte dei led, nella quale il codice dovrà essere reinserito correttamente per due volte, se lo sbagli non preoccuparti !! il codice corretto verrà reso visibile sui led in modo che tu possa impararlo correttamente.
 
