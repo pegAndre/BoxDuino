@@ -35,6 +35,7 @@ Per chiudere la scatola basterà premere il bottone posto al di fuori di essa.
 Una volta premuto il bottone la scatola si chiuderà, il led giallo si illuminerà e da questo momento non bisognerà toccare la scatola e non ostruirla in alcun modo.
 Una volta chiusa correttamente la scatola si rimetterà in attesa del codice di sblocco.
 
+
 <br>
 
  <h2>Hardware (indicativo):</h2>
