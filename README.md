@@ -31,7 +31,7 @@ Se si desidera cambiare il codice di sblocco si puo fare in questo momento, semp
 
 Per chiudere la scatola basterà premere il bottone posto al di fuori di essa.
 
-<h3>5. IN CHIUSURA</h3>
+<h3>5. CHIUSURA SCATOLA</h3>
 Una volta premuto il bottone la scatola si chiuderà, il led giallo si illuminerà e da questo momento non bisognerà toccare la scatola e non ostruirla in alcun modo.
 Una volta chiusa correttamente la scatola si rimetterà in attesa del codice di sblocco.
 
