@@ -244,13 +244,7 @@ void controlloTempo(unsigned long prefissato) {
 }
 
 int calcoloMovimentoMotore(int posizioneCoperchio, int valoreFisso) {
-  int mancano = posizioneCoperchio - valoreFisso;
-
-  // togliere -- mettere funzione abs()
-  if (mancano < 0) {
-    mancano = mancano * -1; // togliere -- mettere funzione abs()
-  }
-  // togliere -- mettere funzione abs()
+  int mancano = abs(posizioneCoperchio - valoreFisso);
   mancano = map(mancano, 0, 16, 0, 100);
   mancano = map(mancano, 0, 360, 0, 2048);
   return mancano;
