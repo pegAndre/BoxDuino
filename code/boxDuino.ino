@@ -1,4 +1,4 @@
-//librerie
+//librerie                        
 #include <Ultrasonic.h>
 #include <Stepper.h>
 
@@ -83,6 +83,8 @@ void acquisizione(int sequenza[]) {
 
 //VERIFICA LA COMBINAZIONE INSERITA
 boolean verifica(int sequenza[]) {
+  animazioneVerifica();
+  animazioneVerifica();
   if (sequenza[0] > (combinazione[0] - range) && sequenza[0] < (combinazione[0] + range) && sequenza[1] > (combinazione[1] - range) && sequenza[1] < (combinazione[1] + range) && sequenza[2] > (combinazione[2] - range) && sequenza[2] < (combinazione[2] + range) && sequenza[3] > (combinazione[3] - range) && sequenza[3] < (combinazione[3] + range)) {
     //LOGGATTO
     sequenzaCorretta();
@@ -95,6 +97,7 @@ boolean verifica(int sequenza[]) {
 
 // VENGONO ILLUMINATI I LED IN BASE AL VALORE LETTO DAL SENSORE DI PRESSIONE
 void illuminaSequenza(int valorePressione) {
+
   int luminosita;
   // La luminosità di ciascun led dipende dalla pressione letta dal sensore
   if (valorePressione > 600) {
@@ -168,6 +171,23 @@ void animazione() {
   digitalWrite(giallo, LOW);
   delay(800);
   spegniTuttiLed();
+}
+
+void animazioneVerifica(){
+  digitalWrite(blu, HIGH);
+  delay(200);
+  digitalWrite(rosso, HIGH);
+  delay(200);
+  digitalWrite(verde, HIGH);
+  delay(200);
+  digitalWrite(giallo, HIGH);
+  digitalWrite(blu, LOW);
+  delay(200);
+  digitalWrite(rosso, LOW);
+  delay(200);
+  digitalWrite(verde, LOW);
+  delay(200);
+  digitalWrite(giallo, LOW);
 }
 
 void spegniTuttiLed() {
@@ -252,6 +272,7 @@ void aperta() {
 
 void loop() {
   switch (stato) {
+
     case scatolaChiusa:
       autenticazione();
       break;
