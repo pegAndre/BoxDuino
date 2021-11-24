@@ -95,7 +95,6 @@ boolean verifica(int sequenza[]) {
 
 // VENGONO ILLUMINATI I LED IN BASE AL VALORE LETTO DAL SENSORE DI PRESSIONE
 void illuminaSequenza(int valorePressione) {
-
   int luminosita;
   // La luminosità di ciascun led dipende dalla pressione letta dal sensore
   if (valorePressione > 600) {
@@ -253,7 +252,6 @@ void aperta() {
 
 void loop() {
   switch (stato) {
-
     case scatolaChiusa:
       autenticazione();
       break;
