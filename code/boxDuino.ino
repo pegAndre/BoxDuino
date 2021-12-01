@@ -1,4 +1,4 @@
-//librerie                        
+//librerie                               
 #include <Ultrasonic.h>
 #include <Stepper.h>
 
@@ -10,10 +10,12 @@
 #define bottoneEsterno 2
 #define cambioCodice 3
 
+#define accensioneMacchina 0
 #define scatolaChiusa 1
 #define inApertura 2
 #define scatolaAperta 3
-#define inChiusura 4
+#define cambioSequenza 4
+#define inChiusura 5
 
 Ultrasonic ultra(12, 13);
 Stepper myStepper(2048, 11, 4, 10, 8);
@@ -27,27 +29,22 @@ void setup() {
   pinMode(verde, OUTPUT);
   pinMode(giallo, OUTPUT);
   pinMode(blu, OUTPUT);
-  myStepper.setSpeed(10);
-  inizializzazioneCombinazione();
 }
 
 //VARIABILI
-const int minimaDistanza =  1;
-const int massimaDistanza = 20;
 const int salita = -1;
 const int discesa = 1;
 const int range = 150;
 int combinazione[4];
 int sequenza[4];
-byte stato = scatolaChiusa;
+byte stato = accensioneMacchina;
 boolean settoTempo = true;
 unsigned long tempo;
 
 //FUNZIONI
 //INIZIALIZZA LA COMBINAZIONE ALL'ACCENSIONE
-void inizializzazioneCombinazione(){
-  acquisizione(combinazione);
-  allenamento();
+void inizializzazioneCombinazione() {
+
 }
 
 //AUTORIZZA L'APERTURA DELLA SCATOLA O MENO A SECONDA DELLA COMBINAZIONE
@@ -153,7 +150,7 @@ void allenamento() {
 void mostramiSequenza() {
   // mostro la pressione da esercitare tramite la luminosità dei led, scandendo tutti i valori
   for (int indiceSequenza = 0; indiceSequenza < 4; indiceSequenza++) {
- //accendo led giusto
+    //accendo led giusto
     for (int valoreLuminosita = 1023; valoreLuminosita >= combinazione[indiceSequenza]; valoreLuminosita-- ) {
       illuminaSequenza(valoreLuminosita);
       delay(3);
@@ -173,7 +170,7 @@ void animazione() {
   spegniTuttiLed();
 }
 
-void animazioneVerifica(){
+void animazioneVerifica() {
   digitalWrite(blu, HIGH);
   delay(200);
   digitalWrite(rosso, HIGH);
@@ -204,16 +201,19 @@ void accendoTuttiLed() {
   digitalWrite(giallo, HIGH);
 }
 
-void movimentoCoperchio(int valoreFisso, int salitaODiscesa) {
+void movimentoCoperchio(int salitaODiscesa) {
   const int minimoRaggiunto = 5;
   const int massimoRaggiunto = 19;
+  const int miMuovoDiUno = 1;
 
   digitalWrite(giallo, HIGH);
   int distanza = ultra.read();
 
   if (distanza >= 3 && distanza <= 24) {
-    int valoreMovimento = calcoloMovimentoMotore(distanza, valoreFisso);
-    myStepper.step(valoreMovimento * salitaODiscesa);
+
+    regolazioneVelocita(distanza);
+
+    myStepper.step(miMuovoDiUno * salitaODiscesa);
 
     switch (salitaODiscesa) {
       case salita:
@@ -229,6 +229,7 @@ void movimentoCoperchio(int valoreFisso, int salitaODiscesa) {
           spegniTuttiLed();
           settoTempo = true;
           stato = scatolaChiusa;
+          myStepper.step(200);
         }
         break;
     }
@@ -251,11 +252,29 @@ void controlloTempo(unsigned long tempoMassimo) {
   }
 }
 
-int calcoloMovimentoMotore(int posizioneCoperchio, int valoreFisso) {
-  int mancano = abs(posizioneCoperchio - valoreFisso);
-  mancano = map(mancano, 0, 16, 0, 100);
-  mancano = map(mancano, 0, 360, 0, 2048);
-  return mancano;
+void regolazioneVelocita(int distanza) {
+  int posizione = map(distanza, 1, 20, 1, 5);
+  switch (posizione) {
+    case 1:
+      myStepper.setSpeed(1);
+      break;
+
+    case 2:
+      myStepper.setSpeed(3);
+      break;
+
+    case 3:
+      myStepper.setSpeed(5);
+      break;
+
+    case 4:
+      myStepper.setSpeed(3);
+      break;
+
+    case 5:
+      myStepper.setSpeed(1);
+      break;
+  }
 }
 
 void aperta() {
@@ -266,27 +285,40 @@ void aperta() {
 
   // CAMBIO SEQUENZA
   if (digitalRead(cambioCodice)) {
-    inizializzazioneCombinazione();
+    stato = cambioSequenza;
   }
+  
 }
 
 void loop() {
   switch (stato) {
+
+    case accensioneMacchina:
+      acquisizione(combinazione);
+      allenamento();
+      stato = scatolaChiusa;
+      break;
 
     case scatolaChiusa:
       autenticazione();
       break;
 
     case inApertura:
-      movimentoCoperchio(massimaDistanza, salita);
+      movimentoCoperchio(salita);
       break;
 
     case scatolaAperta:
       aperta();
       break;
 
+    case cambioSequenza:
+      acquisizione(combinazione);
+      allenamento();
+      stato = scatolaAperta;
+      break;
+
     case inChiusura:
-      movimentoCoperchio(minimaDistanza, discesa);
+      movimentoCoperchio(discesa);
       break;
   }
 }
