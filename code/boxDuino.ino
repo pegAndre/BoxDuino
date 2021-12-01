@@ -253,7 +253,7 @@ void controlloTempo(unsigned long tempoMassimo) {
 }
 
 void regolazioneVelocita(int distanza) {
-  int posizione = map(distanza, 1, 20, 1, 5);
+  int posizione = map(distanza, 1, 20, 1, 6);
   switch (posizione) {
     case 1:
       myStepper.setSpeed(1);
@@ -272,6 +272,10 @@ void regolazioneVelocita(int distanza) {
       break;
 
     case 5:
+      myStepper.setSpeed(1);
+      break;
+      
+    case 6:
       myStepper.setSpeed(1);
       break;
   }
