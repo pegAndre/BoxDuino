@@ -8,7 +8,7 @@ Per dare un servizio di feedback all'utente vengono utilizzati quattro led, che 
 
 <h3>1. AVVIO BOXDUINO</h3>
 <p>Al primo avvio del BoxDuino bisognerà impostare un codice, formato da quattro pressioni indipendenti, le quali verranno usate come codice di accesso. 
-Per salvare una pressione basta premere il sensore di pressione a piacimento regolandosi con il supporto visivo dato dai led, dopo di che al raggiungimento della pressione voluta contemporaneamente bisogna schiacciare bottone posto fuori dalla scatola per salvarla.</p>
+Per salvare una pressione basta impremere essa sull'apposito sensore regolandosi con il supporto visivo dato dai led, dopo di che al raggiungimento della pressione voluta contemporaneamente bisogna schiacciare bottone posto fuori dalla scatola per salvarla.</p>
 <p>Ripete per le successive pressioni.</p>
 
 Una volta settato il codice inizierà una fase di allenamento, evidenziata da una animazione da parte dei led, nella quale il codice dovrà essere reinserito correttamente per due volte, se viene sbagliato il codice corretto verrà reso visibile sui led in modo che si possa impararlo correttamente.
@@ -19,13 +19,13 @@ Quando la scatola è chiusa sarà sempre in attesa di ricevere il codice, una vo
 
 
 <h3>3. APERTURA SCATOLA</h3>
-<p>Una volta inserito il codice corretto la scatola si aprirà in modo automatico, si potrà vedere questo stato dal led giallo che indica che il motore è in funzione.
+<p>Una volta inserito il codice corretto la scatola si aprirà in modo automatico, grazie all'ausilio di un sensore a ultrasuoni che regolerà il motore, si potrà vedere questo stato dal led giallo che indica che il motore è in funzione.
 Finche il led giallo non si spegne non bisogna toccare la scatola.</p>
 <p>Ricorda:
 Lascia sempre libero il coperchio, non ostruirlo, in caso contrario se dopo diversi tentativi non riesce ad aprirsi, la scatola si richiuderà.</p>
 
 <h3>4. SCATOLA APERTA</h3>
-Una volta che il led Giallo sarà spento la scatola è aperta e si potranno essere svolte le proprie attività in maniera sicura.
+Una volta che il led Giallo sarà spento la scatola è aperta e si potranno svolgere le proprie attività in maniera sicura.
 
 Se si desidera cambiare il codice di sblocco si puo fare in questo momento, semplicemente premendo il bottone sinistro all'interno della scatola, le azioni da eseguire saranno le stesse che sono state effettuate durante la prima impostazione del primo codice di sblocco.
 
