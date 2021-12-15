@@ -83,13 +83,13 @@ boolean verifica(int sequenza[]) {
 
 void illuminaSequenza(int valorePressione) {
   int luminosita; // La luminosità di ciascun led dipende dalla pressione letta dal sensore
-  if (valorePressione > 600) {
+  if (valorePressione > 700) {
     luminosita = map(valorePressione, 1023, 700, 0, 255);
     accendoLedAnalogico(luminosita, 0, 0, 0);
-  } else if (valorePressione > 400) {
+  } else if (valorePressione > 480) {
     luminosita = map(valorePressione, 680, 480, 0, 255);
     accendoLedAnalogico(255, luminosita, 0, 0);
-  } else if (valorePressione > 200) {
+  } else if (valorePressione > 350) {
     luminosita = map(valorePressione, 480, 350, 0, 255);
     accendoLedAnalogico(255, 255, luminosita, 0);
   } else {
